@@ -1,0 +1,65 @@
+{
+    "Walker_Big_Size": {
+        "checkpoints": [
+            {
+                "steps": 8499984,
+                "file_path": "results\\Walker_Big_Run_V2\\Walker_Big_Size\\Walker_Big_Size-8499984.onnx",
+                "reward": 255.29485440791998,
+                "creation_time": 1766883216.0747836,
+                "auxillary_file_paths": [
+                    "results\\Walker_Big_Run_V2\\Walker_Big_Size\\Walker_Big_Size-8499984.pt"
+                ]
+            },
+            {
+                "steps": 8999913,
+                "file_path": "results\\Walker_Big_Run_V2\\Walker_Big_Size\\Walker_Big_Size-8999913.onnx",
+                "reward": 135.86975860595703,
+                "creation_time": 1766883635.6718643,
+                "auxillary_file_paths": [
+                    "results\\Walker_Big_Run_V2\\Walker_Big_Size\\Walker_Big_Size-8999913.pt"
+                ]
+            },
+            {
+                "steps": 9499991,
+                "file_path": "results\\Walker_Big_Run_V2\\Walker_Big_Size\\Walker_Big_Size-9499991.onnx",
+                "reward": 406.2995215385191,
+                "creation_time": 1766884050.604623,
+                "auxillary_file_paths": [
+                    "results\\Walker_Big_Run_V2\\Walker_Big_Size\\Walker_Big_Size-9499991.pt"
+                ]
+            },
+            {
+                "steps": 9999984,
+                "file_path": "results\\Walker_Big_Run_V2\\Walker_Big_Size\\Walker_Big_Size-9999984.onnx",
+                "reward": 260.8582513487184,
+                "creation_time": 1766884465.4326332,
+                "auxillary_file_paths": [
+                    "results\\Walker_Big_Run_V2\\Walker_Big_Size\\Walker_Big_Size-9999984.pt"
+                ]
+            },
+            {
+                "steps": 10000124,
+                "file_path": "results\\Walker_Big_Run_V2\\Walker_Big_Size\\Walker_Big_Size-10000124.onnx",
+                "reward": 261.99715477381,
+                "creation_time": 1766884465.4734561,
+                "auxillary_file_paths": [
+                    "results\\Walker_Big_Run_V2\\Walker_Big_Size\\Walker_Big_Size-10000124.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 10000124,
+            "file_path": "results\\Walker_Big_Run_V2\\Walker_Big_Size.onnx",
+            "reward": 261.99715477381,
+            "creation_time": 1766884465.4734561,
+            "auxillary_file_paths": [
+                "results\\Walker_Big_Run_V2\\Walker_Big_Size\\Walker_Big_Size-10000124.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.2.0.dev0",
+        "torch_version": "2.8.0+cpu"
+    }
+}

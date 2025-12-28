@@ -1,0 +1,38 @@
+{
+    "Walker_Big_Size": {
+        "checkpoints": [
+            {
+                "steps": 499868,
+                "file_path": "results\\Walker_Big_Run\\Walker_Big_Size\\Walker_Big_Size-499868.onnx",
+                "reward": 31.48521246441773,
+                "creation_time": 1766875409.8599257,
+                "auxillary_file_paths": [
+                    "results\\Walker_Big_Run\\Walker_Big_Size\\Walker_Big_Size-499868.pt"
+                ]
+            },
+            {
+                "steps": 548224,
+                "file_path": "results\\Walker_Big_Run\\Walker_Big_Size\\Walker_Big_Size-548224.onnx",
+                "reward": 25.482734609006055,
+                "creation_time": 1766875450.3899934,
+                "auxillary_file_paths": [
+                    "results\\Walker_Big_Run\\Walker_Big_Size\\Walker_Big_Size-548224.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 548224,
+            "file_path": "results\\Walker_Big_Run\\Walker_Big_Size.onnx",
+            "reward": 25.482734609006055,
+            "creation_time": 1766875450.3899934,
+            "auxillary_file_paths": [
+                "results\\Walker_Big_Run\\Walker_Big_Size\\Walker_Big_Size-548224.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.2.0.dev0",
+        "torch_version": "2.8.0+cpu"
+    }
+}

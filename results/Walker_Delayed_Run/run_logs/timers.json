@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1766920188",
+        "python_version": "3.10.12 | packaged by Anaconda, Inc. | (main, Jul  5 2023, 19:01:18) [MSC v.1916 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\tester\\miniconda3\\envs\\mlagents\\Scripts\\mlagents-learn config/ppo/Walker_delayed.yaml --run-id=Walker_Delayed_Run --base-port=5006",
+        "mlagents_version": "1.2.0.dev0",
+        "mlagents_envs_version": "1.2.0.dev0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.8.0+cpu",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1766920258"
+    },
+    "total": 69.60866869997699,
+    "count": 1,
+    "self": 0.007719699991866946,
+    "children": {
+        "run_training.setup": {
+            "total": 0.09462069999426603,
+            "count": 1,
+            "self": 0.09462069999426603
+        },
+        "TrainerController.start_learning": {
+            "total": 69.50632829999086,
+            "count": 1,
+            "self": 0.00012320000678300858,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 69.50618789996952,
+                    "count": 1,
+                    "self": 69.50618789996952
+                },
+                "TrainerController._save_models": {
+                    "total": 1.7200014553964138e-05,
+                    "count": 1,
+                    "self": 1.7200014553964138e-05
+                }
+            }
+        }
+    }
+}
