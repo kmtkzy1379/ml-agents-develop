@@ -23,20 +23,16 @@ jobs:
         pre-commit install
     - name: Run markdown checker
       run: |
+        # 実行権限を念のため付与
+        chmod +x utils/run_markdown_link_check.py
         pre-commit run --hook-stage manual markdown-link-check-full --all-files
   full-pytest:
     runs-on: ubuntu-latest
-#   TODO: Re-use pytest workflow once https://github.com/github/roadmap/issues/257 is done.
-#    steps:
-#    - uses: actions/checkout@v4
-#    - uses: ./.github/workflows/pytest.yml
-#      with:
-#        # Run all tests.
-#        pytest_markers: "not slow or slow"
     env:
         TEST_ENFORCE_BUFFER_KEY_TYPES: 1
+        # GPUが見つからないエラーを防ぐため、CPUを強制的に使用させる
+        CUDA_VISIBLE_DEVICES: "-1"
     strategy:
-      # If one test in the matrix fails we still want to run the others.
       fail-fast: false
       matrix:
         python-version: [3.10.12]
@@ -52,9 +48,7 @@ jobs:
     - name: Cache pip
       uses: actions/cache@v4
       with:
-        # This path is specific to Ubuntu
         path: ~/.cache/pip
-        # Look to see if there is a cache hit for the corresponding requirements file
         key: ${{ runner.os }}-pip-${{ hashFiles('ml-agents/setup.py', 'ml-agents-envs/setup.py', 'test_requirements.txt', matrix.pip_constraints) }}
         restore-keys: |
           ${{ runner.os }}-pip-
@@ -75,6 +69,8 @@ jobs:
         cat pip_versions-${{ matrix.python-version }}.txt
     - name: Run pytest
       run: |
+        # PYTHONPATHを追加してモジュールの読み込みエラーを防ぐ
+        export PYTHONPATH=$PYTHONPATH:.
         pytest --cov=ml-agents --cov=ml-agents-envs \
         --cov-report=html --junitxml=junit/test-results-${{ matrix.python-version }}.xml \
         -p no:warnings -v -n 8
@@ -86,5 +82,4 @@ jobs:
           htmlcov
           pip_versions-${{ matrix.python-version }}.txt
           junit/test-results-${{ matrix.python-version }}.xml
-      # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
