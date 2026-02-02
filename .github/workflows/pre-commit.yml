@@ -11,13 +11,14 @@ on:
 
 jobs:
   pre-commit:
-    runs-on: ubuntu-24.04
+    # 安定版の 22.04 に変更
+    runs-on: ubuntu-22.04
     env:
         DOTNET_NOLOGO: 1
-        # 追加: 初回起動時の初期化エラーを防ぐ
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-        # 重要: ホームディレクトリを隔離して共有メモリの衝突を回避する
-        DOTNET_CLI_HOME: /home/runner/.dotnet_home
+        DOTNET_GENERATE_ASPNET_CERTIFICATE: 0
+        # ホームディレクトリを runner 専用に隔離
+        DOTNET_CLI_HOME: /home/runner/.dotnet_work
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
@@ -25,24 +26,34 @@ jobs:
         python-version: 3.10.x
     - uses: ruby/setup-ruby@v1
       env:
-        ImageOS: ubuntu24
+        ImageOS: ubuntu22
       with:
         ruby-version: '2.7'
-        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+        bundler-cache: true
     - uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.202'
-    -   name: Clean dotnet shared memory
-        run: sudo rm -rf /tmp/.dotnet/shm
+    
+    # 実行直前に .dotnet 関連のゴミを完全に掃除
+    - name: Clean dotnet artifacts
+      run: |
+        sudo rm -rf /tmp/.dotnet
+        mkdir -p /home/runner/.dotnet_work
+
     - name: Install manual dependencies
       run: |
         python -m pip install pre-commit
         pre-commit install
+    
     - name: Run pre-commit
       run: |
-        # 実行前に全てのユーティリティスクリプトに権限を付与（念のため）
+        # 権限を付与し、dotnet-format のエラーを回避しつつ実行
         chmod +x utils/*.py
         pre-commit run --all-files
+      env:
+        # ステップレベルでも環境変数を念押し
+        DOTNET_CLI_HOME: /home/runner/.dotnet_work
+
   markdown-link-check:
     runs-on: ubuntu-latest
     steps:
@@ -54,7 +65,6 @@ jobs:
       with:
         node-version: '12'
     - name: Install manual dependencies
-    # pin markdown-link-check version to support multi-level reference link
       run: |
         sudo npm install -g markdown-link-check@3.8.7
         python -m pip install pre-commit
@@ -63,6 +73,7 @@ jobs:
       run: |
         chmod +x utils/run_markdown_link_check.py
         pre-commit run --hook-stage manual markdown-link-check --all-files
+
   validate-meta-files:
     runs-on: ubuntu-latest
     steps:
