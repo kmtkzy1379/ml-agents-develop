@@ -1,76 +1,105 @@
-# Impact of Biophysical Scaling and Neurological Latency on Bipedal Locomotion Learning
-<!-- プロジェクトのキャッチコピー: 物理的制約と神経学的制約がAIの学習に与える影響の検証 -->
 
-![Unity](https://img.shields.io/badge/Unity-2022.3+-black.svg?style=flat&logo=unity)
-![ML-Agents](https://img.shields.io/badge/ML--Agents-Release_21-blue.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
+Impact of Biophysical & Neurological Constraints on Locomotion Learning
+身体的・神経的制約がAIの歩行学習と進化に与える影響の検証
+![alt text](https://img.shields.io/badge/Unity-2022.3+-black.svg?style=flat&logo=unity)
 
-## 📖 Overview
-本プロジェクトは、Unity ML-Agents を用いて、生物学的な制約条件（身体サイズの変化に伴う物理法則、および神経伝達速度の遅延）が、二足歩行エージェントの強化学習プロセスとその収束性にどのような影響を与えるかを検証した比較実験です。
+![alt text](https://img.shields.io/badge/ML--Agents-Release_21-blue.svg)
 
-「Square-Cube Law（2乗3乗の法則）」に基づく筋力不足モデルと、認知科学研究に基づく「情報処理遅延」モデルを作成し、標準モデル（Normal）との学習挙動の差異を分析しました。
+![alt text](https://img.shields.io/badge/Python-3.8+-yellow.svg?style=flat&logo=python)
 
-<!-- ここにデモGIFを貼ると非常に効果的です -->
+![alt text](https://img.shields.io/badge/License-MIT-green.svg)
+📖 Overview
+本プロジェクトは、Unity ML-Agentsを用いた強化学習実験です。
+ML-Agents-Developに内蔵されている標準的なエージェントに対し、「身体の巨大化に伴う筋力不足（2乗3乗の法則）」や「神経伝達速度の遅延（反応速度の低下）」といった生物学的な制約を与えた際、AIがどのような生存戦略（歩行フォーム）を独自に獲得するかを検証しました。
+実験の結果、**「ハンディキャップを持つ個体は、標準個体とは異なる特化型の進化を遂げる」**という、人間の障害やニューロダイバーシティ（神経多様性）にも通じる示唆が得られました。
+<!-- ここにデモ動画4つ。各モデルの歩行と全体像で計4 -->
 <!-- ![Demo GIF](docs/demo.gif) -->
+🎯 Motivation
+強化学習エージェントは通常、理想的な身体と即時反応可能な神経系を持ちますが、現実の生物は物理的・生理的な制約下で運動を獲得します。
+「もしAIに個体差（ハンディキャップ）があったらどうなるか？」という疑問から、以下の2つの仮説モデルを作成しました。
+Scale Model (物理的制約: 2乗3乗の法則)
+身長が伸びると体重は体積（3乗）で増えるが、筋力は断面積（2乗）でしか増えない。この「相対的な筋力低下」にどう適応するか？
 
-## 🎯 Motivation & Hypothesis
-強化学習エージェントは通常、理想的な身体と即時反応可能な神経系を持ちますが、現実の生物は物理的・生理的な制約下で運動を獲得します。本実験では以下の2つの仮説を検証しました。
+Delayed Model (神経的制約: 認知遅延)
+認知から行動までのプロセスを意図的に遅らせた場合、予測制御やバランス感覚はどう変化するか？
 
-1.  **Scale Model (Biophysical Constraint):**
-    身長が大きくなると、体重は体積（3乗）で増加するのに対し、筋力は断面積（2乗）でしか増加しない（2乗3乗の法則）。この「相対的な筋力低下」という物理的制約下でも、エージェントは適応的な歩行を獲得できるか？
-2.  **Delayed Model (Neurological Constraint):**
-    加齢や障害による情報処理速度の低下（反応時間の遅延）は、FEP（自由エネルギー原理）における予測誤差の最小化ループを阻害すると考えられる。意図的に知覚-行動ループを遅延させた場合、学習の収束性や歩行フォームはどう変化するか？
+⚙️ Experiment Setup
+1. Scale Model (Big Size)
+身長を1.5倍に設定。生物物理学的な整合性を保つため、質量と筋力を以下の法則に従ってスケーリングしました。体重あたりの筋力（Power-to-Weight Ratio）は約66%に低下し、重力負荷が高い環境となります。
+Parameter
+Multiplier
+Formula
+Physics Reason
+Height
+x1.5
+       LLL
+     
+Base scaling
+Mass
+x3.375
+       L3L^3L3
+     
+体積は3乗で増加
+Strength
+x2.25
+       L2L^2L2
+     
+筋力（断面積）は2乗で増加
+2. Delayed Model (Latency)
+身体能力は標準モデルと同一ですが、行動決定の頻度（Decision Period）を粗くすることで「情報処理の遅延」を再現しました。
+Model
+Decision Period
+Simulation
+Normal
+10 frames
+健常な反応速度
+Delayed
+20 frames
+知覚-行動ループの遅延（約2倍の反応時間）
+📊 Results & Analysis
+1. 環境適応と報酬獲得 (Cumulative Reward)
+![alt text](images/cumulative_reward.png)
+Normal (水色): 安定した学習曲線を描く。
+Scale (オレンジ): 筋力不足により初期学習は遅れるが、着実に成長する。
+Delayed (紫色): 学習初期は最も苦戦するが、最終段階ではNormalやScaleを上回り、最も高い報酬スコアを記録した。
+2. 生存時間と安定性 (Episode Length)
+![alt text](images/episode_length.png)
+Normal: 最も長く歩き続けられる（安定性が高い）。
+Scale: Normalに次いで安定。転倒頻度は低い。
+Delayed: 報酬は高いが、生存時間（Episode Length）は圧倒的に短い。
+3. ロス推移 (Policy Loss)
+![alt text](images/policy_loss.png)
+各モデルとも学習に伴い収束しているが、Delayedモデルは変動が激しく、常にギリギリの制御を行っていることが示唆される。
+🧠 Discussion: "特化的進化"の考察
+実験データから、ハンディキャップに対するAIの興味深い適応戦略が観測されました。
+🐢 Scale Model: "慎重な保守派"
+体が重く筋力が相対的に弱いこのモデルは、**「ゆっくりと歩くが、あまり転ばない」**戦略を獲得しました。
+エネルギー効率を重視し、重心を低く保つフォームは、巨体を持つ生物の理にかなった進化と言えます。
+⚡ Delayed Model: "ハイリスク・ハイリターンな特化"
+最も驚くべき結果を示したのが遅延モデルです。
+現象: 「生存時間は短いが、獲得報酬は最も多い」。
+戦略: 反応が遅れるため、一度バランスを崩すと立て直せず転倒します。そこでAIは、**「転ぶまでの短い時間の間に、猛スピードで前進して距離（報酬）を稼ぐ」**という極端な戦略を選びました。
+考察:
+これは、与えられた制約下で目的関数（報酬最大化）を達成するための**「特化的進化（Specialized Evolution）」です。
+人間社会においても、ADHDなどの特性を持つ人が特定の分野で爆発的な集中力を発揮したり、視覚に障害がある人が聴覚を鋭敏に発達させたりするように、「ある機能の欠損が、別の機能の過剰な発達や独自の戦略を生む」**という現象を、AIが自律的にシミュレーションしたと言えます。
+この結果は、AIエージェントにおける「個性」とは、パラメータのランダム性だけでなく、制約条件への適応プロセスから生まれる可能性を示唆しています。
+## 🚀 Future Prospects (今後の展望)
 
-## ⚙️ Experiment Setup
+本実験の結果は、単なる歩行シミュレーションにとどまらず、次世代のAI開発において以下の応用可能性を示唆しています。
 
-### 1. Scale Model (Square-Cube Law)
-身長を1.5倍にした際、生物物理学的な整合性を保つため、質量と筋力を以下の法則に従ってスケーリングしました。結果として、**体重あたりの筋力（Power-to-Weight Ratio）は約66%に低下**し、より高負荷な環境となります。
+### 1. Robustness for Physical Robots (実機ロボットの冗長性確保)
+現実のロボットは、バッテリー消耗によるトルク低下（Scaleモデルの状況）や、通信環境悪化によるレイテンシ（Delayedモデルの状況）を避けて通れません。
+本プロジェクトのアプローチを応用し、あらかじめ「制約条件下での生存戦略」を学習させておくことで、ハードウェアトラブル発生時にも即座に「安全歩行モード」や「緊急移動モード」へ適応できる、極めてロバストな制御システムの構築に貢献できます。
 
-| Parameter | Multiplier | Formula | Reason |
-| :--- | :--- | :--- | :--- |
-| **Height (Scale)** | **x1.5** | $L$ | Base scaling factor |
-| **Mass (Weight)** | **x3.375** | $L^3$ | Volume increases by cube |
-| **Strength (Torque)** | **x2.25** | $L^2$ | Muscle cross-section increases by square |
-| **Vision (Ray)** | **x1.5** | $L$ | Adjusted to eye height |
-
-### 2. Delayed Model (Reaction Time)
-身体能力は標準モデルと同一のまま、純粋な「情報処理の遅延」を再現しました。
-遅延倍率（2倍）の根拠として、高齢者や知的障害を持つ集団の反応時間が、健常者と比較して約1.5倍〜3倍（選択反応時）に遅延するという研究結果[*1][*2]を参照しました。
-
-| Parameter | Normal Model | Delayed Model | Note |
-| :--- | :--- | :--- | :--- |
-| **Decision Period** | 10 frames | **20 frames** | Simulates 2x cognitive latency |
-| **Implication** | - | - | Increases latency in the sensorimotor loop |
-
-> **Reference:**
-> *   [*1] Studies indicate that reaction times in elderly populations (70+) are approx. 1.5x (simple) to 3.0x (choice) slower compared to young adults.
-> *   [*2] Research on intellectual disabilities suggests a 2x-3x delay in reaction times for complex motor tasks due to information processing speed.
-
-## 📊 Results (検証結果)
-
-<!-- ここに教えていただいた「結果」を記述します。以下はプレースホルダーです -->
-
-### Learning Convergence (学習曲線)
-*   **Scale Model:** 筋力対重量比の低下により、初期段階での学習効率は著しく低下しました。しかし、xx万ステップ付近で……（どのような適応を見せたか記述）。
-*   **Delayed Model:** 決定周期の粗さ（20フレームごとの行動決定）により、フィードバック制御が間に合わず……（振動した、転倒しやすかった等の結果）。
-
-<!-- TensorBoardの画像を貼る場所 -->
-<!-- ![Training Graph](docs/training_graph.png) -->
-
-### Gait Analysis (歩行分析)
-*   **Normal:** 安定した走行。
-*   **Scale:** （例：ストライドを短くし、重心を低く保つような歩行を獲得した）。
-*   **Delayed:** （例：急な姿勢制御ができず、ゆっくりとした歩行に収束した）。
-
-## 🛠️ Technical Stack
-*   **Engine:** Unity 2022.3.x
-*   **ML Toolkit:** Unity ML-Agents Release 21
-*   **Algorithm:** PPO (Proximal Policy Optimization)
-*   **Space:** Continuous Action Space / Vector Observation + Ray Perception
-
-## 🧠 Discussion
-（ここにFEPの観点などを絡めた考察を書きます。結果をいただければ肉付けします）
-遅延モデルにおけるパフォーマンスの低下は、予測誤差（Prediction Error）のフィードバックが遅れることで、自己受容感覚（Proprioception）と実際の身体状態の解離が生じたためと考えられる……
-
-## 👨‍💻 Author
-[Your Name/Account]
+### 2. AI Neurodiversity (制約が生む多様な知能)
+最も興味深い発見は、**「制約（ハンディキャップ）が、標準モデルにはない特化した能力を開花させた」**点です。
+これは人間社会におけるニューロダイバーシティ（神経多様性）と同様、AIにおいても「画一的な高性能」を目指すのではなく、「異なる制約を持ったAIのチーム」を作ることで、単一モデルでは解決できない複雑な課題を突破できる可能性を示しています。
+今後は、異なる制約を持つエージェント同士を協力させる「多様性アンサンブル学習」への発展を視野に入れています。
+🛠️ Technical Stack
+Engine: Unity 2022.3.x
+ML Library: Unity ML-Agents Release 21
+Algorithm: PPO (Proximal Policy Optimization)
+Observation: Vector Observation + Ray Perception Sensor 3D
+Action: Continuous Action Space (Joint Torques)
+👨‍💻 Author
+[kmtkzy1379]
