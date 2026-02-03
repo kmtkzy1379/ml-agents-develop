@@ -1,117 +1,148 @@
 # Impact of Biophysical & Neurological Constraints on Locomotion Learning
-**身体的・神経的制約がAIの歩行学習と進化に与える影響の検証**
 
-[![Unity Editor](https://img.shields.io/badge/Unity-6000.3.2f1-black.svg?style=flat&logo=unity)](Project/ProjectSettings/ProjectVersion.txt)
-[![ML‑Agents (package)](https://img.shields.io/badge/com.unity.ml--agents-4.0.0-blue.svg)](com.unity.ml-agents/package.json)
-[![Python (repo)](https://img.shields.io/badge/mlagents-1.2.0.dev0-yellow.svg)](ml-agents/mlagents/trainers/__init__.py)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+**身体的・神経的制約がAIの歩行学習に与える影響**
+
+![Unity](https://img.shields.io/badge/Unity-6000.3.2f1-black.svg?logo=unity)
+![ML-Agents](https://img.shields.io/badge/com.unity.ml--agents-4.0.0-blue.svg)
+![Python](https://img.shields.io/badge/mlagents-1.2.0.dev0-yellow.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+
+---
 
 ## 概要 / Overview
-本プロジェクトは **Unity ML-Agents** をベースにした強化学習実験リポジトリです。
 
-主な研究テーマは、**「身体的・神経的制約（サイズスケーリングによる筋力比低下、認知・神経遅延）が動的制御学習（歩行）に与える影響」** の調査です。物理的なハンディキャップや神経伝達の遅延が、エージェントの学習戦略や進化にどのような変化をもたらすかを検証します。
+本リポジトリは **Unity ML-Agents** を用いた強化学習実験プロジェクトです。
 
----
+研究目的は、
 
-## 環境・要件 / Requirements
-本リポジトリは以下の環境で構成されています。プロジェクトを開く際は、Unity Editorのバージョンにご注意ください。
+> **身体的制約（スケール変化による筋力比低下）** および
+> **神経的制約（意思決定・反応の遅延）**
 
-### Unity Environment
-- **Unity Editor**: `6000.3.2f1` (Unity 6)
-- **ML-Agents Package (C#)**: `4.0.0`
-
-### Python Environment
-- **Python**: `3.10` (推奨)
-- **ML-Agents (Python)**: `1.2.0.dev0` (Development Build)
-- **ML-Agents Envs**: `1.2.0.dev0`
+が、**二足歩行の学習戦略や運動様式にどのような影響を与えるか** を検証することです。
 
 ---
 
-## インストール / Installation
+## 研究背景 / Motivation
 
-リポジトリをクローンし、UnityプロジェクトとPython仮想環境のセットアップを行います。
+実世界の生物は、
 
-### 1. クローン
+* 体格差による力学的不利
+* 神経伝達や認知処理の遅延
+
+といった制約の中で運動を最適化しています。
+
+本研究ではこれらを **人工エージェントに明示的に課す** ことで、
+制約下で生じる **戦略の変化・特化的適応（Specialized Evolution）** を観察します。
+
+---
+
+## 環境 / Requirements
+
+### Unity
+
+* **Unity Editor**: `6000.3.2f1` (Unity 6)
+* **ML-Agents (C#)**: `4.0.0`
+
+### Python
+
+* **Python**: `3.10`（推奨）
+* **ml-agents**: `1.2.0.dev0`
+* **ml-agents-envs**: `1.2.0.dev0`
+
+> ⚠️ PyTorch は CUDA 環境に応じて別途インストールしてください。
+
+---
+
+## セットアップ / Installation
+
+### 1. リポジトリの取得
+
 ```bash
 git clone https://github.com/kmtkzy1379/ml-agents-develop.git
 cd ml-agents-develop
 ```
-2. Unity プロジェクトのセットアップ
 
-Unity Hub を起動し、Add からクローンしたディレクトリ内の Project/ フォルダを選択してリストに追加します。
+### 2. Unity プロジェクト
 
-Unity Editor バージョン 6000.3.2f1 でプロジェクトを開きます。
+1. Unity Hub → **Add**
+2. `Project/` フォルダを指定
+3. Unity `6000.3.2f1` で起動
 
-※ 初回起動時はパッケージの解決に時間がかかる場合があります。
+※ 初回起動時はパッケージ解決に時間がかかります。
 
-3. Python 環境の構築
-
-Python 3.10 の仮想環境を作成し、リポジトリに含まれる開発版パッケージをインストールします。
+### 3. Python 環境
 
 ```bash
-# 仮想環境の作成と有効化
 python3.10 -m venv .venv
-source .venv/bin/activate   # Windows (PowerShell): .venv\Scripts\activate
+source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
 
-# 基本ツールのアップグレード
 pip install -U pip setuptools wheel
-
-# ML-Agents パッケージのインストール（Editable Install）
 pip install -e ./ml-agents-envs
 pip install -e ./ml-agents
 ```
-Note: PyTorchなどの依存ライブラリは、お使いの環境（CUDAバージョン等）に合わせて適切にインストールしてください。
 
-使い方 / Usage
-トレーニングの実行
+---
 
-Unity Editor で学習させたいシーンを開きます。
+## 使い方 / Usage
 
-エージェントの Behavior Parameters（Continuous Actions, Ray Perception Sensor 等）が正しく設定されていることを確認します。
-
-ターミナルで以下のコマンドを実行し、Unity Editor 側で Play ボタンを押します。
+1. Unity Editor で学習用シーンを開く
+2. **Behavior Parameters** が正しく設定されていることを確認
+3. ターミナルで以下を実行
 
 ```bash
-# 基本的な学習コマンド
 mlagents-learn config/your_config.yaml --run-id=run01 --train
 ```
-※ config/ ディレクトリ内の yaml ファイルや、--run-id は実験に合わせて変更してください。
 
-実験内容 / Experiments
+4. Unity Editor で ▶ **Play**
 
-本プロジェクトでは、標準モデルに対して2つの制約モデルを作成し、学習結果を比較しています。
+---
 
-比較モデル
+## 実験設計 / Experiments
 
-Scale Model (物理的制約)
+### 比較モデル
 
-身長を1.5倍、体重を体積則に従い増加させたモデル。
+#### 1. Baseline Model
 
-筋力は断面積則でスケールするため、体重に対する相対的な筋力が低下している状態。
+* 標準的な体格・反応速度
 
-Delayed Model (神経的制約)
+#### 2. Scale Model（身体的制約）
 
-Decision Period（意思決定の間隔）を粗く設定し、反応遅延（神経伝達の遅れ）を再現したモデル。
+* 身長: **1.5倍**
+* 質量: **体積則に従い増加**
+* 筋力: **断面積則スケーリング** → 相対筋力低下
 
-結果の傾向
+#### 3. Delayed Model（神経的制約）
 
-Scale Model: ゆっくりだが安定した歩行を行う「保守的戦略」を獲得。
+* Decision Period を増加
+* 意思決定・反応遅延を再現
 
-Delayed Model: 高い報酬を得ることもあるが転倒しやすい「ハイリスク・ハイリターン」な動作に特化。
+---
 
-これらの結果から、制約条件下における「特化的適応（Specialized Evolution）」についての考察を行っています。
+## 観察された傾向 / Results
 
+| モデル           | 獲得された戦略       |
+| ------------- | ------------- |
+| Scale Model   | 低速・安定志向の保守的歩行 |
+| Delayed Model | 転倒リスクの高い高報酬行動 |
 
-License
+これらは **制約に対する異なる最適解** が存在することを示唆します。
+
+---
+
+## 考察 / Discussion
+
+* 制約は単なる性能低下ではなく **戦略空間の再構成** を引き起こす
+* 神経遅延は「慎重さ」ではなく「投機性」を誘発する場合がある
+* 身体制約は運動の安定性を優先する方向へ適応を促す
+
+---
+
+## License
 
 MIT License
 
-Author
+---
 
-kmtkzy1379
+## Author
 
-code
-Code
-download
-content_copy
-expand_less
+**kmtkzy1379**
