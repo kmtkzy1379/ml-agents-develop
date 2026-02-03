@@ -34,7 +34,8 @@
 ### 1. クローン
 ```bash
 git clone https://github.com/kmtkzy1379/ml-agents-develop.git
-cd ml-agents-develop```
+cd ml-agents-develop
+```
 2. Unity プロジェクトのセットアップ
 
 Unity Hub を起動し、Add からクローンしたディレクトリ内の Project/ フォルダを選択してリストに追加します。
@@ -58,7 +59,7 @@ pip install -U pip setuptools wheel
 # ML-Agents パッケージのインストール（Editable Install）
 pip install -e ./ml-agents-envs
 pip install -e ./ml-agents
-
+```
 Note: PyTorchなどの依存ライブラリは、お使いの環境（CUDAバージョン等）に合わせて適切にインストールしてください。
 
 使い方 / Usage
@@ -73,7 +74,7 @@ Unity Editor で学習させたいシーンを開きます。
 ```bash
 # 基本的な学習コマンド
 mlagents-learn config/your_config.yaml --run-id=run01 --train
-
+```
 ※ config/ ディレクトリ内の yaml ファイルや、--run-id は実験に合わせて変更してください。
 
 実験内容 / Experiments
