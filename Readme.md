@@ -1,8 +1,3 @@
-code
-Markdown
-download
-content_copy
-expand_less
 # Impact of Biophysical & Neurological Constraints on Locomotion Learning
 **身体的・神経的制約がAIの歩行学習と進化に与える影響の検証**
 
@@ -39,7 +34,7 @@ expand_less
 ### 1. クローン
 ```bash
 git clone https://github.com/kmtkzy1379/ml-agents-develop.git
-cd ml-agents-develop
+cd ml-agents-develop```
 2. Unity プロジェクトのセットアップ
 
 Unity Hub を起動し、Add からクローンしたディレクトリ内の Project/ フォルダを選択してリストに追加します。
